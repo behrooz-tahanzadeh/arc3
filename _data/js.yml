@@ -1,0 +1,3 @@
+- src: "assets/js/three.min.js"
+- src: "assets/js/CanvasRenderer.js"
+- src: "assets/js/Projector.js"
