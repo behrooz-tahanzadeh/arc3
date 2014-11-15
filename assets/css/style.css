@@ -58,25 +58,22 @@ div#pp
 	cursor:pointer;
 }
 
-input#tail
+#activateGControl
 {
 	position:fixed;
 	bottom:30px;
-	left:80px;
-	width:200px;
+	right:10px;
+	width:30px;
+	height:30px;
+	background-color:gray;
+	color:white;
+	font-size:30px;
+	padding:20px;
+	border-radius:50px;
+	transition:0.2s all;
 }
 
-div#help
+#activateGControl:active
 {
-	position:fixed;
-	font-size:x-large;
-	top:50%;
-	left:50%;
-	width:500px;
-	transform:translateX(-250px);
-	text-align:center;
-}
-div#help>a
-{
-	color:blue;
+	background-color:red;
 }

@@ -2,9 +2,13 @@
 layout: default
 ---
 <!-- index.html -->
+<div id="activateGControl">G</div>
+
 <script>
 			var camera, scene, renderer;
 			var group;
+			
+			var GBtn, gIsActive;
 
 			var mouseX = 0;
 			var mouseY = 0;
@@ -17,11 +21,15 @@ layout: default
 
 			function init()
 			{
+				GBtn = document.querySelector('#activateGControl');
+				gIsActive = false;
+			
 				camera = new THREE.PerspectiveCamera( 40, (window.innerWidth-10) / (window.innerHeight-10), 1, 1000 );
 				camera.position.set(0, 5, 50);
 				scene = new THREE.Scene();
 				
 				group = new THREE.Group();
+				group.position.set(0,5,0);
 				
 				scene.add( group );
 
@@ -58,7 +66,7 @@ layout: default
 					arcLn = new THREE.Line(arc, mat);
 					
 					a = (i*Math.PI)/180;
-					
+					arcLn.position.set(0,-5,0);
 					arcLn.rotation.set(0,a,0);
 					group.add(arcLn);
 				}
@@ -71,6 +79,20 @@ layout: default
 
 				document.addEventListener( 'mousemove', DocumentOnMouseMove, false );
 				document.addEventListener( 'touchmove', DocumentOnTouchMove, false );
+				
+				GBtn.addEventListener('touchstart', function(e){gIsActive = true;}, false);
+				GBtn.addEventListener('touchend', function(e){gIsActive = false;}, false);
+				
+				window.addEventListener("deviceorientation", function(event){
+					if(gIsActive)
+					{
+						
+						group.rotation.x = ((90-event.beta)*Math.PI)/180;
+						group.rotation.y = (event.alpha*Math.PI)/-180;
+						renderer.render( scene, camera );
+					}
+				}, true);
+				
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
@@ -87,21 +109,26 @@ layout: default
 			//
 			function DocumentOnMouseMove(event)
 			{
-				mouseX = event.clientX - windowHalfX;
-				mouseY = event.clientY - windowHalfY;
-				
-				render();
+				if(!gIsActive)
+				{
+					mouseX = event.clientX - windowHalfX;
+					mouseY = event.clientY - windowHalfY;
+					render();
+				}
 			}
 			
 			function DocumentOnTouchMove(event)
 			{
-				if ( event.touches.length == 1 )
+				if(!gIsActive)
 				{
-					event.preventDefault();
-					mouseX = event.touches[ 0 ].pageX - windowHalfX;
-					mouseY = event.touches[ 0 ].pageY - windowHalfY;
-					
-					render();
+					if ( event.touches.length == 1 )
+					{
+						event.preventDefault();
+						mouseX = event.touches[ 0 ].pageX - windowHalfX;
+						mouseY = event.touches[ 0 ].pageY - windowHalfY;
+						
+						render();
+					}
 				}
 			}
 
